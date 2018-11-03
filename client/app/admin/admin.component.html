@@ -1,0 +1,37 @@
+<app-loading [condition]="isLoading"></app-loading>
+
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="card" *ngIf="!isLoading">
+  <h4 class="card-header">Danh sách thành viên ({{users.length}})</h4>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Tên tài khoản</th>
+          <th scope="col">Email</th>
+          <th scope="col">Loại tài khoản</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="users.length === 0">
+        <tr>
+          <td colspan="4">Chưa có thành viên đăng ký</td>
+        </tr>  
+      </tbody>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.username}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.role}}</td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="deleteUser(user)"
+                    [disabled]="auth.currentUser._id === user._id">
+              <i class="fa fa-trash"></i> Xóa
+            </button>
+          </td>
+        </tr>  
+      </tbody>
+    </table>
+  </div>
+</div>

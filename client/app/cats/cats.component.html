@@ -1,0 +1,76 @@
+<app-loading [condition]="isLoading"></app-loading>
+
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="card mb-3" *ngIf="!isLoading">
+  <h4 class="card-header">Danh sách sản phẩm ({{cats.length}})</h4>
+  <div class="card-body">
+    <table class="table table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Tên</th>
+          <th scope="col">Số lượng</th>
+          <th scope="col">Đơn giá</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="cats.length === 0">
+        <tr>
+          <td colspan="4">Hiện tại không có sản phẩm nào trong giỏ hàng</td>
+        </tr>  
+      </tbody>
+      <tbody *ngIf="!isEditing">
+        <tr *ngFor="let cat of cats">
+          <td>{{cat.name}}</td>
+          <td>{{cat.age}}</td>
+          <td>{{cat.weight}} VNĐ</td>
+          <td>
+            <button class="btn btn-sm btn-primary" (click)="enableEditing(cat)">
+              <i class="fa fa-pencil"></i> Sửa
+            </button> 
+            <button class="btn btn-sm btn-danger ml-1" (click)="deleteCat(cat)">
+              <i class="fa fa-trash"></i> Xóa
+            </button>
+          </td>
+        </tr>  
+      </tbody>
+      <tbody *ngIf="isEditing">
+        <tr>
+          <td colspan="4">
+            <form class="form-inline" #form="ngForm" (ngSubmit)="editCat(cat)">
+              <input class="form-control mr-2" type="text" name="name"
+                     [(ngModel)]="cat.name" placeholder="Tên sản phẩm" required>
+              <input class="form-control mr-2" type="number" name="age"
+                     [(ngModel)]="cat.age" placeholder="Số lượng" min="0" required>
+              <input class="form-control mr-2" type="number" name="weight"
+                     [(ngModel)]="cat.weight" placeholder="Đơn giá (VNĐ)" step="any" min="0" required>
+              <button class="btn btn-sm btn-primary mr-2" type="submit" [disabled]="!form.form.valid">
+                <i class="fa fa-floppy-o"></i> Lưu
+              </button>
+              <button class="btn btn-sm btn-warning" (click)="cancelEditing()">
+                <i class="fa fa-times"></i> Hủy
+              </button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card" *ngIf="!isEditing">
+  <h4 class="card-header">Thêm sản phẩm</h4>
+  <div class="card-body">
+    <form class="form-inline" [formGroup]="addCatForm" (ngSubmit)="addCat()">
+      <input class="form-control mr-2" type="text" name="name"
+             formControlName="name" placeholder="Tên sản phẩm">
+      <input class="form-control mr-2" type="number" name="age"
+             formControlName="age" placeholder="Số lượng" min="0">
+      <input class="form-control mr-2" type="number" name="weight"
+             formControlName="weight" placeholder="Đơn giá (VNĐ)"  step="any" min="0" >
+      <button class="btn btn-primary" type="submit" [disabled]="!addCatForm.valid">
+        <i class="fa fa-plus"></i> Thêm
+      </button>
+    </form>
+  </div>
+</div>
